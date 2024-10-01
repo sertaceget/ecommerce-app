@@ -1,0 +1,42 @@
+ARCHITECTURE
+Microservice
+
+FRONTEND
+React
+Next.js
+Tailwind CSS
+
+BACKEND
+Golang (Node.js for real-time services if needed.)
+
+DATABASE
+MongoDB for product data, catalog, and user-generated content.
+PostgreSQL for orders, payments, and user data.
+
+AUTHENTICATION
+JWT (JSON Web Tokens) for internal authentication.
+OAuth2 for external authentication. (Google, Facebook, Apple etc.)
+
+PAYMENT GATEWAY
+Stripe
+
+CONTAINERIZATION AND ORCHESTRATION
+Docker + Kubernetes
+
+MESSAGE BROKER (FOR MICROSERVICE COMMUNICATION)
+RabbitMQ
+
+CACHING LAYER
+Redis - Memcached
+
+SEARCH ENGINE
+Elasticsearch
+
+MONITORING
+Prometheus + Grafana
+
+LOGGING
+ELK Stack (Elasticsearch, Logstash, Kibana)
+
+CI/CD
+GitHub Actions
