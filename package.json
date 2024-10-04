@@ -1,0 +1,15 @@
+{
+  "name": "ecommerce-app",
+  "version": "1.0.0",
+  "scripts": {
+    "client": "cd client && npm run dev",
+    "api-gateway": "cd services/api-gateway && npm run dev",
+    "auth-service": "cd services/auth-service && go run src/main.go",
+    "user-service": "cd services/user-service && npm run dev",
+    "product-service": "cd services/product-service && go run src/main.go",
+    "dev": "concurrently \"npm run client\" \"npm run api-gateway\" \"npm run auth-service\" \"npm run user-service\" \"npm run product-service\""
+  },
+  "devDependencies": {
+    "concurrently": "^6.3.0"
+  }
+}
