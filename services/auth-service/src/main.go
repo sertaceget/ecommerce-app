@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"os"
 
+	"ecommerce-app/services/auth-service/src/db"
+
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
@@ -13,6 +15,8 @@ func main() {
 	if err := godotenv.Load(); err != nil {
 		log.Println("No .env file found")
 	}
+
+	db.ConnectPostgres()
 
 	r := gin.Default()
 

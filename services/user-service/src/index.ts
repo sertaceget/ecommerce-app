@@ -1,5 +1,6 @@
 import express from 'express';
-import * as dotenv from 'dotenv';
+import dotenv from 'dotenv';
+import pool from './db/postgres';
 
 dotenv.config();
 
@@ -8,14 +9,28 @@ const PORT = process.env.PORT || 3003;
 
 app.use(express.json());
 
-app.get('/users', (req, res) => {
-  // Implement get users logic
-  res.json({ users: ['User 1', 'User 2'] });
+app.get('/users', async (req, res) => {
+  try {
+    const { rows } = await pool.query('SELECT * FROM users');
+    res.json({ users: rows });
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 });
 
-app.post('/users', (req, res) => {
-  // Implement create user logic
-  res.status(201).json({ message: 'User created successfully' });
+app.post('/users', async (req, res) => {
+  try {
+    const { name, email } = req.body;
+    const { rows } = await pool.query(
+      'INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *',
+      [name, email]
+    );
+    res.status(201).json({ user: rows[0] });
+  } catch (error) {
+    console.error('Error creating user:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 });
 
 app.listen(PORT, () => {
