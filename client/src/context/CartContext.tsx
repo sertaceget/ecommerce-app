@@ -2,16 +2,20 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-type CartItem = {
+type Product = {
   id: number;
   name: string;
   price: number;
+  category: string;
+};
+
+type CartItem = Product & {
   quantity: number;
 };
 
 type CartContextType = {
   items: CartItem[];
-  addToCart: (item: CartItem) => void;
+  addToCart: (product: Product) => void;
   removeFromCart: (id: number) => void;
   updateQuantity: (id: number, quantity: number) => void;
   clearCart: () => void;
@@ -33,15 +37,15 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.setItem('cart', JSON.stringify(items));
   }, [items]);
 
-  const addToCart = (item: CartItem) => {
+  const addToCart = (product: Product) => {
     setItems((prevItems) => {
-      const existingItem = prevItems.find((i) => i.id === item.id);
+      const existingItem = prevItems.find((i) => i.id === product.id);
       if (existingItem) {
         return prevItems.map((i) =>
-          i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
+          i.id === product.id ? { ...i, quantity: i.quantity + 1 } : i
         );
       }
-      return [...prevItems, { ...item, quantity: 1 }];
+      return [...prevItems, { ...product, quantity: 1 }];
     });
   };
 
