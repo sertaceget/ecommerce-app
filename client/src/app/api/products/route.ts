@@ -1,21 +1,32 @@
 import { NextResponse } from 'next/server';
 
-const products = [
-  { id: 1, name: "Smartphone", price: 599.99, category: "Electronics" },
-  { id: 2, name: "Laptop", price: 999.99, category: "Electronics" },
-  { id: 3, name: "T-shirt", price: 19.99, category: "Clothing" },
-  { id: 4, name: "Jeans", price: 49.99, category: "Clothing" },
-  { id: 5, name: "Coffee Maker", price: 79.99, category: "Home & Garden" },
-  { id: 6, name: "Running Shoes", price: 89.99, category: "Sports" },
-];
+const API_GATEWAY_URL = process.env.API_GATEWAY_URL || 'http://localhost:8080';
 
 export async function GET() {
-  return NextResponse.json(products);
+  try {
+    const response = await fetch(`${API_GATEWAY_URL}/products`);
+    if (!response.ok) throw new Error('Failed to fetch products');
+    const data = await response.json();
+    return NextResponse.json(data);
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+  }
 }
 
 export async function POST(request: Request) {
-  const product = await request.json();
-  // In a real app, you would save this to a database
-  products.push({ ...product, id: products.length + 1 });
-  return NextResponse.json(product, { status: 201 });
+  try {
+    const productData = await request.json();
+    const response = await fetch(`${API_GATEWAY_URL}/products`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(productData),
+    });
+    if (!response.ok) throw new Error('Failed to create product');
+    const data = await response.json();
+    return NextResponse.json(data, { status: 201 });
+  } catch (error) {
+    console.error('Error creating product:', error);
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+  }
 }

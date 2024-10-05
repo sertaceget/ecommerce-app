@@ -1,17 +1,16 @@
 import express from 'express';
-import cors from 'cors';
-import proxy from 'express-http-proxy';
+import createProxyMiddleware from 'http-proxy-middleware';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 3001;
+const PORT = process.env.PORT || 8080;
 
-app.use(cors());
-app.use(express.json());
+app.use('/auth', createProxyMiddleware({ target: 'http://auth-service:3002', changeOrigin: true }));
+app.use('/users', createProxyMiddleware({ target: 'http://user-service:3003', changeOrigin: true }));
+app.use('/products', createProxyMiddleware({ target: 'http://product-service:3004', changeOrigin: true }));
 
-app.use('/auth', proxy('http://auth-service:3002'));
-app.use('/users', proxy('http://user-service:3003'));
-app.use('/products', proxy('http://product-service:3004'));
-
-app.listen(port, () => {
-  console.log(`API Gateway running on port ${port}`);
+app.listen(PORT, () => {
+  console.log(`API Gateway running on port ${PORT}`);
 });
