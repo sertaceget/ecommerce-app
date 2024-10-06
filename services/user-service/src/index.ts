@@ -1,6 +1,8 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import pool from './db/postgres';
+import { getUsers, createUser } from './handlers/user_handlers';
+import { authMiddleware } from './middleware/auth';
+import cors from 'cors';
 
 dotenv.config();
 
@@ -8,31 +10,18 @@ const app = express();
 const PORT = process.env.PORT || 3003;
 
 app.use(express.json());
+app.use(cors());
 
-app.get('/users', async (req, res) => {
-  try {
-    const { rows } = await pool.query('SELECT * FROM users');
-    res.json({ users: rows });
-  } catch (error) {
-    console.error('Error fetching users:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
+// Apply authMiddleware to all routes
+app.use((req, res, next) => {
+  authMiddleware()(req, res, next);
 });
 
-app.post('/users', async (req, res) => {
-  try {
-    const { name, email } = req.body;
-    const { rows } = await pool.query(
-      'INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *',
-      [name, email]
-    );
-    res.status(201).json({ user: rows[0] });
-  } catch (error) {
-    console.error('Error creating user:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
+app.get('/users', getUsers);
+app.post('/users', createUser);
 
 app.listen(PORT, () => {
   console.log(`User service running on port ${PORT}`);
+}).on('error', (error) => {
+  console.error('Error starting server:', error);
 });

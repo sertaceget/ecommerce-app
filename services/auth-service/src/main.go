@@ -2,42 +2,46 @@ package main
 
 import (
 	"log"
-	"net/http"
 	"os"
 
 	"ecommerce-app/services/auth-service/src/db"
+	"ecommerce-app/services/auth-service/src/handlers"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
 
 func main() {
+	// Load .env file if it exists
 	if err := godotenv.Load(); err != nil {
 		log.Println("No .env file found")
 	}
 
-	db.ConnectPostgres()
+	// Initialize database connection
+	if err := db.ConnectPostgres(); err != nil {
+		log.Fatalf("Failed to connect to database: %v", err)
+	}
 
 	r := gin.Default()
+	r.Use(cors.Default())
 
-	r.POST("/login", loginHandler)
-	r.POST("/register", registerHandler)
+	// Auth routes
+	r.POST("/login", handlers.Login)
+	r.POST("/register", handlers.Register)
+	r.POST("/refresh", handlers.RefreshToken)
+	r.POST("/logout", handlers.Logout)
+	r.GET("/validate", handlers.ValidateToken)
 
+	// Set the port
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "3002"
+		port = "8082" // Using 8082 as the default port for consistency
 	}
+
+	// Run the server
+	log.Printf("Server running on port %s", port)
 	if err := r.Run(":" + port); err != nil {
 		log.Fatalf("Failed to run server: %v", err)
 	}
-}
-
-func loginHandler(c *gin.Context) {
-	// Implement login logic
-	c.JSON(http.StatusOK, gin.H{"message": "Login successful"})
-}
-
-func registerHandler(c *gin.Context) {
-	// Implement registration logic
-	c.JSON(http.StatusCreated, gin.H{"message": "User registered successfully"})
 }

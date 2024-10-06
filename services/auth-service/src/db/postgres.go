@@ -10,7 +10,7 @@ import (
 
 var DB *sql.DB
 
-func ConnectPostgres() {
+func ConnectPostgres() error {
 	postgresURI := os.Getenv("POSTGRES_URI")
 	if postgresURI == "" {
 		log.Fatal("POSTGRES_URI environment variable is not set")
@@ -24,8 +24,9 @@ func ConnectPostgres() {
 
 	err = DB.Ping()
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	log.Println("Connected to PostgreSQL")
+	return nil
 }
