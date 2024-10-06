@@ -10,13 +10,31 @@ import (
 )
 
 func Login(c *gin.Context) {
-	// Implement login logic
-	// Verify credentials, generate JWT token
+	// Verify credentials
+	// ...
+
+	userId := "user_id_here" // Get this from your database
+	token, err := utils.GenerateToken(userId)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate token"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"token": token})
 }
 
 func Register(c *gin.Context) {
-	// Implement registration logic
-	// Create user in database, generate JWT token
+	// Create user in database
+	// ...
+
+	userId := "new_user_id_here" // Get this from your database
+	token, err := utils.GenerateToken(userId)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate token"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"token": token})
 }
 
 func RefreshToken(c *gin.Context) {

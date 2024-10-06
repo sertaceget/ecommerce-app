@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { generateToken } from '@/lib/jwt';
 
 const AUTH_SERVICE_URL = process.env.AUTH_SERVICE_URL || 'http://localhost:8082';
 
 export async function POST(req: NextRequest) {
-  const { path } = await req.json();
+  const { path, email, password } = await req.json();
   
   try {
     const response = await fetch(`${AUTH_SERVICE_URL}/${path}`, {
@@ -11,7 +12,7 @@ export async function POST(req: NextRequest) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(await req.json()),
+      body: JSON.stringify({ email, password }),
     });
 
     if (!response.ok) {
@@ -19,7 +20,8 @@ export async function POST(req: NextRequest) {
     }
 
     const data = await response.json();
-    return NextResponse.json(data);
+    const token = generateToken(data.userId);
+    return NextResponse.json({ token });
   } catch (error) {
     console.error(`Error in ${path}:`, error);
     return NextResponse.json({ error: `${path} failed` }, { status: 401 });

@@ -5,9 +5,10 @@ const USER_SERVICE_URL = process.env.USER_SERVICE_URL || 'http://localhost:3003'
 
 export const GET = authMiddleware(async (req: NextRequest) => {
   try {
+    const token = localStorage.getItem('token');
     const response = await fetch(`${USER_SERVICE_URL}/users`, {
       headers: {
-        'Authorization': req.headers.get('Authorization') || '',
+        'Authorization': `Bearer ${token}`,
       },
     });
     
