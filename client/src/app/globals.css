@@ -7,19 +7,17 @@
   --foreground: #343a40;
   --primary: #6246ea;
   --secondary: #d1d1e9;
-  --accent: #e45858;
+  //--accent: #e45858;
   --nav-text: #ffffff;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #2b2c34;
-    --foreground: #fffffe;
-    --primary: #7f5af0;
-    --secondary: #72757e;
-    --accent: #2cb67d;
-    --nav-text: #fffffe;
-  }
+.dark {
+  --background: #2b2c34;
+  --foreground: #fffffe;
+  --primary: #7f5af0;
+  --secondary: #72757e;
+  //--accent: #2cb67d;
+  --nav-text: #fffffe;
 }
 
 body {
