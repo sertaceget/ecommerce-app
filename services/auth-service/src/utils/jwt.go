@@ -2,6 +2,7 @@ package utils
 
 import (
 	"os"
+	"strings"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -24,4 +25,12 @@ func ValidateToken(tokenString string) bool {
 	})
 
 	return err == nil && token.Valid
+}
+
+func ExtractTokenFromHeader(header string) string {
+	parts := strings.Split(header, " ")
+	if len(parts) == 2 && parts[0] == "Bearer" {
+		return parts[1]
+	}
+	return ""
 }

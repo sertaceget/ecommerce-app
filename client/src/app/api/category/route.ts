@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-const CATEGORY_SERVICE_URL = process.env.CATEGORY_SERVICE_URL || 'http://localhost:8080';
+const CATEGORY_SERVICE_URL = process.env.CATEGORY_SERVICE_URL || 'http://localhost:3003';
 
 export async function GET() {
   try {

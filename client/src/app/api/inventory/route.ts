@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-const API_GATEWAY_URL = process.env.API_GATEWAY_URL || 'http://localhost:8080';
+const API_GATEWAY_URL = process.env.API_GATEWAY_URL || 'http://localhost:3004';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
