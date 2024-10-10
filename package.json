@@ -1,15 +1,24 @@
 {
   "name": "ecommerce-app",
   "version": "1.0.0",
+  "type": "module",
   "scripts": {
     "client": "cd client && npm run dev",
     "api-gateway": "cd services/api-gateway && npm run dev",
     "auth-service": "cd services/auth-service && go run src/main.go",
     "user-service": "cd services/user-service && npm run dev",
     "product-service": "cd services/product-service && go run src/main.go",
-    "dev": "concurrently \"npm run client\" \"npm run api-gateway\" \"npm run auth-service\" \"npm run user-service\" \"npm run product-service\""
+    "dev": "concurrently \"npm run client\" \"npm run api-gateway\" \"npm run auth-service\" \"npm run user-service\" \"npm run product-service\"",
+    "start": "node --loader ts-node/esm src/index.ts"
   },
   "devDependencies": {
-    "concurrently": "^6.3.0"
+    "concurrently": "^6.3.0",
+    "@types/express": "^4.17.13",
+    "@types/node": "^16.11.12",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.2"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
   }
 }
